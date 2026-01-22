@@ -347,9 +347,10 @@
             </div>
             <div class="form-group">
                 <label for="horaVisita">Hora de visita</label>
-                <input type="time" id="horaVisita" name="hora de visita" required>
+                <input type="text" id="horaVisita" name="hora de visita" placeholder="Ej: 08:30 AM" required>
                 <i class="fas fa-clock"></i>
             </div>
+
             <!-- Campo: Cantidad de referidos externos -->
             <div class="form-group">
                 <label for="cantidad_referidos">Cantidad de referidos externos</label>
@@ -384,6 +385,34 @@
         </form>
     </div>
     <script>
+        
+        const horaInput = document.getElementById("horaVisita");
+            const horaFmt   = document.getElementById("horaVisitaFmt");
+
+            function toAmPm(hhmm) {
+                if (!hhmm) return "";
+                const [hhStr, mmStr] = hhmm.split(":");
+                let hh = parseInt(hhStr, 10);
+                const mm = mmStr;
+
+                const isPM = hh >= 12;
+                const suf  = isPM ? "p.m." : "a.m.";
+
+                hh = hh % 12;
+                if (hh === 0) hh = 12;
+
+                return `${hh}:${mm} ${suf}`;
+            }
+
+            // Actualiza al cambiar
+            horaInput.addEventListener("input", () => {
+                horaFmt.value = toAmPm(horaInput.value);
+            });
+
+            // Por si se envía sin tocar el campo
+            horaInput.form?.addEventListener("submit", () => {
+                horaFmt.value = toAmPm(horaInput.value);
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Variables para almacenar datos del spreadsheet
             let fechaCounts = {};
